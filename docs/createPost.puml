@@ -1,0 +1,31 @@
+@startuml
+participant Client
+participant PostController
+participant PostService
+participant UserRepository
+participant PostRepository
+
+Client -> PostController: POST /api/posts
+
+activate PostController
+PostController -> PostService: createPost(PostDto.Request)
+
+activate PostService
+PostService -> UserRepository: findById(userId)
+
+activate UserRepository
+UserRepository --> PostService: User
+
+deactivate UserRepository
+PostService -> PostRepository: save(post)
+
+activate PostRepository
+PostRepository --> PostService: savedPost
+
+deactivate PostRepository
+PostService --> PostController: PostDto.Response
+deactivate PostService
+
+PostController --> Client: ResponseEntity<PostDto.Response>
+deactivate PostController
+@enduml

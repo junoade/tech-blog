@@ -1,0 +1,26 @@
+@startuml
+
+participant Client as c
+participant PostController as pc
+participant PostService as ps
+participant PostRepository as pr
+
+c -> pc : GET /api/post/{id}
+
+activate pc
+pc -> ps : getPost(id)
+
+activate ps
+ps -> pr : findById(id)
+
+activate pr
+pr-->ps : Post
+deactivate pr
+
+ps-->pc : PostDto.Response
+deactivate ps
+
+pc-->c :ResponseEntity<PostDto.Response>
+deactivate pc
+
+@enduml
