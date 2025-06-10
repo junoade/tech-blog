@@ -25,6 +25,10 @@ public class PostService {
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        if (user.isResigned()) {
+            throw new IllegalStateException("Not Authorized User; Accessed by resigned user");
+        }
+
         Post post = Post.builder()
             .author(user)
             .title(request.getTitle())
